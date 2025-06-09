@@ -1,4 +1,6 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import React from 'react';
+import { Image, StyleSheet, Platform, Button } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -6,6 +8,33 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
 export default function HomeScreen() {
+  const [response, setResponse] = React.useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+
+  // Verifica si hay token guardado
+  React.useEffect(() => {
+    (async () => {
+      const token = await AsyncStorage.getItem('accessToken');
+      setIsAuthenticated(!!token);
+    })();
+  }, []);
+
+  const callBackend = async () => {
+    try {
+      const token = await AsyncStorage.getItem('accessToken');
+      if (!token) throw new Error('No autenticado');
+      const res = await fetch('http://localhost:8080/api/hello', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+      setResponse(JSON.stringify(data));
+    } catch (e: any) {
+      setResponse('Error: ' + (e?.message || e));
+    }
+  };
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -49,6 +78,17 @@ export default function HomeScreen() {
           <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
           <ThemedText type="defaultSemiBold">app-example</ThemedText>.
         </ThemedText>
+      </ThemedView>
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText type="subtitle">Llama a tu backend</ThemedText>
+        {isAuthenticated ? (
+          <>
+            <Button title="Llamar al backend" onPress={callBackend} />
+            {response && <ThemedText>{response}</ThemedText>}
+          </>
+        ) : (
+          <ThemedText>Inicia sesión para llamar al backend protegido.</ThemedText>
+        )}
       </ThemedView>
     </ParallaxScrollView>
   );

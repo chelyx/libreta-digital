@@ -2,6 +2,7 @@
   "expo": {
     "name": "libreta-digital",
     "slug": "libreta-digital",
+    "owner": "asoffulto",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -36,6 +37,17 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "auth0Domain": "dev-7tciizrz7pk84r8q.us.auth0.com",
+      "auth0ClientId": "Q4YbgP3EtOCJoOkGK2OFM8SFUlAa85jM",
+      "auth0Audience": "https://dev-7tciizrz7pk84r8q.us.auth0.com/api/v2/",
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "924145dc-beac-4042-9f75-d2cc2e46c749"
+      }
     }
   }
 }

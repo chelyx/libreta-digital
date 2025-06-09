@@ -1,4 +1,3 @@
-import { Auth0Provider } from '@auth0/auth0-react';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
@@ -30,14 +29,6 @@ export default function RootLayout() {
   }
 
   return (
-    <Auth0Provider
-      domain={Constants.expoConfig?.extra?.auth0Domain}
-      clientId={Constants.expoConfig?.extra?.auth0ClientId}
-      authorizationParams={{
-        redirect_uri: 'http://localhost:3000',
-        audience: Constants.expoConfig?.extra?.auth0Audience
-      }}
-    >
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
@@ -46,6 +37,5 @@ export default function RootLayout() {
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>
-    </Auth0Provider>
   );
 }
